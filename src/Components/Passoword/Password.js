@@ -9,24 +9,69 @@ const Password = () => {
   // all states
   const [password, setPassword] = useState("");
   const [passwordLength, setPasswordLength] = useState(0);
-  const [uppercase, setUppercase] = useState(true);
-  const [lowercase, setLowercase] = useState(true);
-  const [numbers, setNumbers] = useState(true);
-  const [symbols, setSymbols] = useState(true);
-  const [errors, setErrors] = useState({});
+  const [uppercase, setUppercase] = useState(false);
+  const [lowercase, setLowercase] = useState(false);
+  const [numbers, setNumbers] = useState(false);
+  const [symbols, setSymbols] = useState(false);
+
 
   const generatePassword = () => {
-    //errorhandling
-    setErrors({});
-    if (!uppercase && !lowercase && !numbers && !symbols) {
-      return setErrors("At least one character type must be selected");
-    } else if (passwordLength === "0") {
-      return setErrors("Password length cannot be 0");
-    } else if (passwordLength === "") {
-      return setErrors("Invalid password length");
-    } else if (passwordLength > 7) {
-      return setErrors("Password length cannot exceed 7 characters");
+ //errorhandling
+    if (passwordLength < 1) {
+      alert("please select password length")
     }
+    if (!uppercase && !lowercase && !numbers && !symbols) {
+      alert("At least one character type must be selected")
+    }
+
+    //rectangle
+    if(uppercase || lowercase || numbers || symbols){
+          var color = " #A4FFAF"
+          document.getElementById("rectangle1").style.background = color;
+    }
+    if(!uppercase && !lowercase && !numbers && !symbols){
+      var color_1 = "#24252B"
+      document.getElementById("rectangle1").style.background = color_1;
+}
+
+    if((uppercase && lowercase) || (uppercase && symbols) || (uppercase && numbers) ||  (lowercase && numbers) ||  (lowercase && symbols) ||  (symbols && numbers)){
+      var color2 = " #A4FFAF"
+      document.getElementById("rectangle2").style.background = color2;
+     }
+    if((uppercase && !lowercase && !numbers && !symbols) ||(!uppercase && lowercase && !numbers && !symbols) || (!uppercase && !lowercase && numbers && !symbols) || (!uppercase && !lowercase && !numbers && symbols)){
+     var color_2 = "#24252B";
+     document.getElementById("rectangle2").style.background = color_2
+    }
+     if((uppercase && lowercase && numbers) || (uppercase && lowercase && symbols) ||(numbers && lowercase && symbols) || (numbers && uppercase && symbols)){
+      var color3 = " #A4FFAF"
+      document.getElementById("rectangle3").style.background = color3;
+     }
+     if((!uppercase && !lowercase && !numbers) || (!uppercase && !lowercase && !symbols) ||(!numbers && !lowercase && !symbols) || (!numbers && !uppercase && !symbols)){
+      var color_3 = "#24252B" 
+      document.getElementById("rectangle3").style.background = color_3;
+     }
+     if((!uppercase && !lowercase) || (!uppercase && !symbols) || (!uppercase && !numbers) ||  (!lowercase && !numbers) ||  (!lowercase && !symbols) ||  (!symbols && !numbers)){
+      var color__3 = "#24252B" 
+      document.getElementById("rectangle3").style.background = color__3;
+     }
+
+     if(uppercase && lowercase && numbers && symbols){
+      var color4 = " #A4FFAF"
+      document.getElementById("rectangle4").style.background = color4;
+     }
+     if(!uppercase || !lowercase || !numbers || !symbols){
+      var color_4 =  "#24252B"
+      document.getElementById("rectangle4").style.background = color_4;
+     }
+     if(passwordLength<1 ){
+      var color_5 =  "#24252B"
+      document.getElementById("rectangle4").style.background = color_5;
+      document.getElementById("rectangle3").style.background = color_5;
+      document.getElementById("rectangle2").style.background = color_5;
+      document.getElementById("rectangle1").style.background = color_5;
+     }
+
+
 
     //password generation
     let password = "";
@@ -45,6 +90,8 @@ const Password = () => {
       }
     }
     setPassword(password);
+    
+   
   };
 
   const random = (min = 0, max = 1) => {
@@ -82,19 +129,29 @@ const Password = () => {
   }
 
   //toast message after successfull password generation
-  const notify = () =>
-    toast.success("Password Copied !!", {
-      position: toast.POSITION.TOP_RIGHT,
-    });
+  var notify;
+  if (passwordLength>0){
+        notify = () =>
+       toast.success("Password Copied !!", {
+         position: toast.POSITION.TOP_RIGHT,
+       });
+  }
+  
+ 
+
+
+  
 
   return (
     <div class="main">
       {/* clipboard and toast message */}
-      <div class="card card-1" style={{ height: "5rem", width: "28rem" }}>
+      <div class="card card-1" style={{ height: "100px", width: "28rem" }}>
         <div class="card-body">
-          {password}
+        <input type="text" className="passwordtext"  value={password}  placeholder= "PASSWORD" />
+          
           <div>
-            <CopyToClipboard class="clipboard" text={password}>
+          
+            <CopyToClipboard className="clipboard" text={password}>
               <div onClick={notify}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -198,47 +255,28 @@ const Password = () => {
 
                 <div
                   class="rectangle"
-                  style={
-                    passwordLength > 4 &&
-                      uppercase &&
-                      lowercase &&
-                      numbers &&
-                      symbols
-                      ? { backgroundColor: " #A4FFAF" }
-                      : { backgroundColor: "#24252B" }
-                  }
+                  id="rectangle4"
+          
                 ></div>
                 <div
                   class="rectangle"
-                  style={
-                    passwordLength > 3 && uppercase && lowercase && numbers 
-                      ? { backgroundColor: " #A4FFAF" }
-                      : { backgroundColor: "#24252B" }
-                  }
+                  id="rectangle3"
+                  
                 ></div>
                 <div
                   class="rectangle"
-                  style={
-                    passwordLength > 2 && uppercase && lowercase
-                      ? { backgroundColor: " #A4FFAF" }
-                      : { backgroundColor: "#24252B" }
-                  }
+                  id="rectangle2"
+                 
                 ></div>
                 <div
                   class="rectangle"
-                  style={
-                    passwordLength > 0 && uppercase
-                      ? { backgroundColor: " #A4FFAF" }
-                      : { backgroundColor: "#24252B" }
-                  }
+                  id="rectangle1"
+                  
                 ></div>
               </div>
             </div>
           </div>
-          {/* error handling */}
-          {errors.length && <li className="error">{errors}</li>}
-          {/* generate buttons */}
-          <button class="btn btn-secondary" onClick={generatePassword}>
+          <button class="btn btn-secondary" onClick={generatePassword} >
             GENERATE{" "}
           </button>
         </div>
